@@ -4,3 +4,11 @@ pnpm-lock.yaml
 server/src/config.ts
 server/src/function-endpoint.ts
 server/src/function-endpoint.test.ts
+web-directory/
+
+
+
+
+
+
+
