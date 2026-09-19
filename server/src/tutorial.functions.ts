@@ -31,8 +31,8 @@ import {
   readTutorialTargetToken,
 } from "./target-token.js";
 
-const tutorialMessage = "This is a test message sent by a manager.";
-const botMessage = "This is a test message sent by a bot.";
+const tutorialMessage = "Hello, world! 👋 (SKKU 2026 team3 · manager)";
+const botMessage = "Hello, world! 👋 (SKKU 2026 team3 · bot)";
 
 @Extension({ name: "command", systemVersion: "v1" })
 export class CommandExtension {
