@@ -1,24 +1,32 @@
-# SKKU 2026 team3
+# Team 3 리소스
 
-- 레포: https://github.com/skku-channel-hackathon-2026/team3
-- 채널톡 앱: `SKKU 2026 Team3` (`6aab941b654f07d53314`)
-- 앱 관리: https://channel.works/-/developers/apps/6aab941b654f07d53314/general
-- 공통 채널: 성균관대 해커톤
-- 검증 그룹: https://channel.works/xd1l0/team-chat/groups/609235
-- 서버: https://skku-team3.skku-hackathon-2026.workers.dev
-- 전용 D1: `skku-team3` (`7a6bf46b-02d0-4b36-9a19-e69c8d205606`)
-- 자동 배포: PR 머지 후 main CI가 성공하면 웹훅으로 원격 D1 마이그레이션 후 Cloudflare 자동 배포를 실행합니다. 실행 대기·빌드 시간이 필요합니다.
+| 항목        | 값                                                   |
+| ----------- | ---------------------------------------------------- |
+| GitHub      | https://github.com/skku-channel-hackathon-2026/team3 |
+| Channel App | `SKKU 2026 Team3`                                    |
+| App ID      | `6aab941b654f07d53314`                               |
+| 검증 그룹   | https://channel.works/xd1l0/team-chat/groups/609235  |
+| Worker      | https://skku-team3.skku-hackathon-2026.workers.dev   |
+| D1          | `skku-team3`                                         |
 
-참가팀 11개 앱과 준비위 team0 앱은 같은 채널에 설치되어 있습니다. `/tutorial` 목록에서 `SKKU 2026 Team3`을 선택하세요.
-팀별 앱·서버·DB는 각각 분리되어 있습니다. 채널과 테스트 대화방은 함께 사용합니다.
+공통 채널의 `/tutorial` 목록에서 **SKKU 2026 Team3**을 선택합니다. 팀별 앱·Worker·DB는 분리되어 있고 검증 그룹만 함께 사용합니다.
 
-## 테스트할 때
+## 현재 상태
 
-`앱_개발_검증` 공개 그룹에서 실행하세요. 봇의 `writeGroupMessage` API는 비공개 그룹 전송을 지원하지 않습니다.
-현재 튜토리얼 WAM은 봇 전송 실패에도 닫힐 수 있으므로, 닫힌 것만으로 성공으로 판단하지 말고 실제 메시지를 확인하세요.
-기존 `docs/desk-qa.md`는 team1 파일럿 기록입니다.
+- 스꾸깃 전체 UI를 `wam/public/skkugit/`에 연결
+- 온보딩, 44개 평일 미션, 도감, 옆자리, 로컬 대화 유지
+- 선택적 로컬 누끼와 원본 fallback 포함
+- 사용자가 누를 때만 Channel Talk Messenger 실행
+- 키 없는 독립본을 `web-directory/`에 공개
+- 2026-09-19 최종 `main` CI 통과
 
-[개발·DB 마이그레이션 안내](HACKATHON.ko.md)를 확인하세요.
-DB 스키마 변경은 `cloudflare/migrations/`의 새 SQL로 관리합니다. main CI 성공 후 원격 D1 마이그레이션 → 앱 배포가 자동 실행되며, SQL 실패 시 앱 배포는 중단됩니다.
-팀장에게 이 레포 Admin·해당 앱 owner 초대를 발송했습니다. 각 초대를 수락한 뒤 개발하세요.
-앱 초대 확인: [개발자 앱 목록](https://channel.works/-/developers/apps).
+사진과 입력 데이터는 브라우저 로컬에 남고 팀 채팅으로 자동 전송되지 않습니다.
+
+## 운영 경계
+
+- `main` CI 성공 후 Cloudflare 자동 배포가 시작됩니다.
+- CI 성공과 실제 배포 완료는 별도 확인이 필요합니다.
+- 원격 D1 마이그레이션, 앱 비밀 키, Function·Extension 등록 갱신은 운영진에게 요청합니다.
+- 공유 앱 Endpoint를 개인 개발 주소로 변경하지 않습니다.
+
+개발 절차는 [HACKATHON.ko.md](HACKATHON.ko.md), 검증 결과는 [docs/desk-qa.md](docs/desk-qa.md)를 확인하세요.

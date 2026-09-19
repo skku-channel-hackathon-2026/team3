@@ -1,131 +1,81 @@
-# SKKU 2026 team3 — Channel App
+# 스꾸깃
 
-**SKKU 2026 team3** · [이 팀의 리소스와 준비 상태](TEAM.md)
+> 매일 한 장씩, 성균관대에서 함께 만드는 새내기 기억 도감
 
-> **성균관대 해커톤 팀 개발 안내**: [시작하기·배포·DB 마이그레이션](HACKATHON.ko.md) · [Desk 검증 기록](docs/desk-qa.md)
-> 팀 레포 Admin·채널톡 앱 owner 초대를 수락하고, 공통 성균관대 해커톤 채널에 참여하세요.
-> 앱 초대 확인·수락: [개발자 앱 목록](https://channel.works/-/developers/apps) — 초대 이메일과 같은 계정으로 로그인합니다.
-> 팀 레포는 **PR 머지 → main CI 성공 → 원격 D1 마이그레이션 → Cloudflare Workers 자동 배포** 순서입니다. 빌드·실행 대기 시간이 필요합니다.
-> DB 마이그레이션은 자동 적용됩니다. 앱 비밀 키 변경·익스텐션 등록 갱신은 운영진에게 요청합니다. Vercel 또는 Cloudflare 계정 초대는 필요하지 않습니다.
+스꾸깃은 새내기가 평일 사진 미션을 수행하고, 친구들과 작은 기록을 쌓도록 돕는 Channel Talk 인앱입니다. 사진과 메모는 사용자의 브라우저에 저장되며, 자동으로 팀 채팅이나 서버에 전송되지 않습니다.
 
-[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md)
+## 주요 기능
 
-SKKU hackathon teams: see the [Cloudflare deployment and database guide](HACKATHON.ko.md).
+- **오늘의 미션**: 44개 미션을 평일마다 순환 제공
+- **도감**: 제출한 대표 사진과 메모를 날짜별로 보관
+- **옆자리**: 그룹별 멤버와 사진 기록 확인
+- **로컬 대화**: 그룹 데모 채팅을 브라우저 안에서 사용
+- **로컬 누끼**: IMG.LY 런타임을 이용한 선택적 배경 제거, 실패 시 원본 유지
+- **궁금증**: 사용자가 직접 누르면 Channel Talk Messenger 열기
 
-A minimal Channel App Store app built with the official
-[Channel App SDK](https://github.com/channel-io/app-sdk). It demonstrates the current SDK path
-instead of implementing token exchange, extension registration, signature verification, and WAM
-bindings by hand.
+사진, 프로필, 메모, 그룹 대화는 브라우저 로컬 저장소에만 남습니다. 미션 제출은 대표 사진과 메모를 기록하는 방식이며 자동 판정 기능은 없습니다.
 
-Use this repository for a runnable end-to-end app. Use the SDK repository for the API contract and
-design guidance:
+## 실행 방법
 
-- [English first-app quickstart](https://github.com/channel-io/app-sdk/blob/main/docs/guides/en/quickstart.md)
-- [English app-development guide](https://github.com/channel-io/app-sdk/blob/main/docs/guides/en/app-development.md)
-- [English concepts: Function, Extension, WAM, and authentication](https://github.com/channel-io/app-sdk/blob/main/docs/guides/en/concepts.md)
-- [English Extension guide](https://github.com/channel-io/app-sdk/blob/main/docs/guides/en/extensions.md)
-- [한국어 앱 개발 전체 가이드](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ko/app-development.md)
-- [한국어 핵심 개념](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ko/concepts.md)
-- [한국어 Extension 전체 가이드](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ko/extensions.md)
-- [日本語アプリ開発完全ガイド](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ja/app-development.md)
-- [日本語の基本概念](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ja/concepts.md)
-- [日本語 Extension 完全ガイド](https://github.com/channel-io/app-sdk/blob/main/docs/guides/ja/extensions.md)
-- [Authentication and tokens](https://github.com/channel-io/app-sdk/blob/main/docs/reference/typescript/AUTH-AND-TOKENS.md)
-- [TypeScript architecture](https://github.com/channel-io/app-sdk/blob/main/docs/reference/typescript/ARCHITECTURE.md)
-- [Command extension](https://github.com/channel-io/app-sdk/blob/main/docs/reference/typescript/extensions/command.md)
-- [WAM SDK](https://github.com/channel-io/app-sdk/blob/main/docs/reference/typescript/WAM.md)
+### Channel Talk에서 실행
 
-## What this app demonstrates
+공통 해커톤 채널의 `앱_개발_검증` 그룹에서 `/tutorial`을 실행하고 **SKKU 2026 Team3**을 선택합니다.
 
-- `@channel.io/app-sdk-server` and `@channel.io/app-sdk-wam` `0.17.2`
-- a `command` extension registered by operators for the deployed Workers app
-- typed app functions with Zod input/output schemas
-- SDK-managed app/channel token caching and refresh
-- HMAC request verification with the SDK signature guard
-- a React WAM using `@channel.io/app-sdk-wam` hooks
-- a shared Zod contract package used by both the server and React WAM
-- redesigned Bezier components from `@channel.io/bezier-react/beta`
-- normalization of nullable optional command fields currently emitted by AppStore
+### 로컬 개발
 
-Run the `/tutorial` desk command in a group chat to open a WAM. The WAM can send a team-chat message
-either through the app bot (server-side app function) or as the current manager (WAM native
-function). Other chat types show an explicit unsupported message instead of silently closing.
-
-Concepts in this repository map to concrete code as follows:
-
-- **Extension**: `CommandExtension` publishes command metadata as the versioned `command` capability.
-- **Function**: `tutorial.open` and `tutorial.sendAsBot` are standalone typed operations referenced by the command and WAM.
-- **WAM**: the React UI is served at `/resource/wam/tutorial`; `useCallFunction` calls the app server and `useNativeFunction` acts as the current manager.
-- **Authentication**: `SignatureGuard` verifies inbound requests, `TokenManager` caches the channel token used by the bot path, the server signs the allowed group-chat target before giving it to the WAM, and the Channel host owns manager authorization.
-
-## SDK contract alignment
-
-This tutorial follows the public SDK runtime contract:
-
-- NestJS with `ChannelAppModule`
-- decorated, schema-backed functions
-- `PUT /functions/:version` (`/functions/v1` for the command extension)
-- extension discovery and registration through the SDK/AppStore
-- a narrow ingress compatibility mapping from bare `PUT /functions` calls to the same verified
-  `v1` handler when the caller does not carry a system version
-
-This app pins `0.17.2` for reproducible builds. Workers disables startup auto-registration;
-operators update registration after function schemas or extension metadata change.
-Its WAM uses only public SDK hooks and Bezier APIs.
-
-## 해커톤 개발 시작
-
-Node.js 24와 pnpm 11.24.0을 사용합니다. 이 레포를 clone하세요.
+Node.js 24와 pnpm 11.24.0을 사용합니다.
 
 ```sh
-git clone https://github.com/skku-channel-hackathon-2026/team3.git
-cd team3
 corepack enable
 corepack pnpm install --frozen-lockfile
-corepack pnpm build:cloudflare
-```
-
-[개발 가이드](HACKATHON.ko.md)의 가짜 로컬 환경값으로 `.dev.vars`를 만든 후 실행합니다.
-
-```sh
 corepack pnpm db:migrate:local
 corepack pnpm dev:cloudflare
 ```
 
-`.dev.vars`는 Git에 포함하지 않습니다. 로컬 DB와 원격 DB는 별개입니다.
-D1을 사용하는 기능은 Wrangler로 실행하세요. Node 서버만 실행하면 D1이 제공되지 않습니다.
-실제 Desk/API 연동에 필요한 키와 테스트 설정은 운영진에게 요청하세요.
-이미 연결된 팀 앱의 Endpoint를 개인 로컬 주소로 변경하지 마세요.
+로컬 실행 전 루트에 `.dev.vars`가 필요합니다. 실제 키는 문서나 Git에 넣지 않습니다. 자세한 내용은 [개발·배포 가이드](HACKATHON.ko.md)를 참고하세요.
 
-## 배포와 확인
+### 독립 정적 사이트
 
-팀 레포에서 작업 브랜치의 PR을 `main`에 머지하면 main CI 성공 후 미적용 SQL을 원격 D1에 적용하고 앱을 배포합니다. SQL 적용 실패 시 앱 배포도 중단됩니다.
-PR 검사만 성공하거나 main CI가 실패한 경우에는 배포되지 않습니다.
-서버는 Cloudflare Workers Free, DB는 팀별 D1입니다. 별도 Vercel 배포는 사용하지 않습니다.
-CI 성공과 배포 완료는 별개이며, 배포 로그·커밋 SHA는 운영진이 확인할 수 있습니다.
-`/api/health`는 서버 상태, `/api/ready`는 실제 D1 연결(`SELECT 1`)을 확인합니다.
-이 상태 검사만으로 기능의 데이터 저장·조회까지 검증되는 것은 아닙니다.
+`web-directory/`는 서버와 키 없이 실행할 수 있는 정적 내보내기입니다.
 
-DB 변경은 `cloudflare/migrations/`의 새 SQL 파일로 코드와 함께 PR에 포함하세요.
-main CI 성공 후 해당 커밋의 미적용 SQL이 팀 전용 D1에 자동 적용됩니다. 운영진의 수동 적용은 필요하지 않습니다.
-적용한 파일은 수정·삭제하지 말고 새 보정 SQL을 추가하세요. 마이그레이션 이후 앱 배포가 실패해도 DB 변경은 유지되므로,
-기존 앱과 호환되는 스키마 변경을 사용하세요. 코드 revert는 DB를 되돌리지 않습니다.
-Function 스키마·익스텐션·커맨드 메타데이터 변경 후에는 앱 등록 갱신도 요청합니다.
-
-## Project map
-
-```text
-server/
-  src/app.module.ts          SDK module, registration configuration, signature guard
-  src/function-endpoint.ts   bare Function Endpoint to v1 ingress mapping
-  src/tutorial.functions.ts command metadata and typed app functions
-  src/target-token.ts        short-lived signed group target for the bot path
-packages/shared/
-  src/index.ts               WAM data and app/native function wire contracts
-wam/
-  src/hooks/                 validates host data with the shared Zod contract
-  src/pages/Send/Send.tsx    WAM SDK hooks for app/native calls
+```sh
+cd web-directory
+node server.mjs
 ```
 
-Use the SDK guides and references for the current contract, and use this repository for its complete
-server-and-WAM implementation. The SDK quickstart links here when runnable TypeScript code is useful.
+이 내보내기에는 Channel Talk Plugin Key와 Access Secret이 없으므로 `궁금증` 버튼은 키가 없다는 안내만 표시합니다.
+
+## 검증
+
+```sh
+corepack pnpm format:check
+corepack pnpm lint
+corepack pnpm typecheck
+corepack pnpm test
+corepack pnpm build:cloudflare
+```
+
+2026-09-19 기준 최종 GitHub Actions CI가 통과했습니다. 세부 검증 범위는 [QA 기록](docs/desk-qa.md)에 정리했습니다.
+
+## 구조
+
+```text
+server/                    Channel App Function, 인증, D1 접근
+packages/shared/           서버와 WAM의 공용 Zod 계약
+wam/src/                   Channel WAM 셸
+wam/public/skkugit/        실제 스꾸깃 정적 앱
+web-directory/             키 없는 독립 정적 내보내기
+cloudflare/                Workers 진입점과 D1 마이그레이션
+```
+
+## 배포
+
+`main` CI 성공 후 운영진의 웹훅이 Cloudflare Workers 배포를 시작합니다. CI 성공과 실제 배포 완료는 별개입니다. DB 마이그레이션, Function 스키마 및 Extension 등록 갱신은 운영진에게 요청합니다.
+
+- [팀 리소스](TEAM.md)
+- [개발·배포 가이드](HACKATHON.ko.md)
+- [QA 기록](docs/desk-qa.md)
+
+## 라이선스
+
+프로젝트 코드와 각 외부 자산의 라이선스는 저장소 내 고지 파일을 따릅니다. 로컬 누끼 런타임에는 IMG.LY의 AGPL-3.0 구성요소가 포함되며 관련 원문과 고지를 제거하지 않습니다. Gaegu 폰트는 SIL Open Font License를 따릅니다.
