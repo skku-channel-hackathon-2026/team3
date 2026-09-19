@@ -1,44 +1,14 @@
-# WAM
+# 스꾸깃 WAM
 
-[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md)
+`wam/src/`는 Channel Talk WAM 셸이고, 실제 제품 화면은 `wam/public/skkugit/`에 있습니다.
 
-This React frontend uses
-[`@channel.io/app-sdk-wam`](https://github.com/channel-io/app-sdk/tree/main/ts/packages/wam)
-for the WAM bridge and
-[`@channel.io/app-sdk-wam-ui`](https://github.com/channel-io/app-sdk/tree/main/ts/packages/wam-ui)
-for WAM-specific theming, navigation, states, and content-height synchronization. Import
-general-purpose UI components directly from `@channel.io/bezier-react/beta`.
-
-The server and WAM both depend on `@tutorial/shared`. Its Zod schemas and inferred types keep WAM
-data, app-function inputs, native-function inputs, WAM names, and function names aligned. Secrets,
-tokens, and server-only runtime state do not belong in the shared package.
-
-The example pins Bezier React `4.0.0-next.13` and Bezier Icons `0.60.0`. Bezier React 4 is still a
-prerelease, so keep the selected version explicit and check the
-[SDK WAM UI guide](https://github.com/channel-io/app-sdk/blob/main/docs/reference/typescript/WAM-UI.md)
-before upgrading it.
-
-## Setup
-
-Install Node.js 24 or newer, then enable pnpm through Corepack:
+- `App.tsx`: WAM 헤더, 닫기, 430×720 크기, 스꾸깃 iframe
+- `site-entry.js`: 배포 경로와 관계없이 `skkugit/index.html`로 연결
+- `public/skkugit/`: 온보딩, 미션, 도감, 옆자리, 로컬 대화, 누끼, 궁금증
 
 ```sh
-corepack enable
-corepack prepare pnpm@11.24.0 --activate
-pnpm install --frozen-lockfile
+corepack pnpm dev:wam
+corepack pnpm build:cloudflare
 ```
 
-Run the WAM development server from the repository root:
-
-```sh
-pnpm dev:wam
-```
-
-Build all workspaces from the repository root:
-
-```sh
-pnpm build
-```
-
-The WAM output is written to `wam/dist/`. The tutorial server exposes that directory below
-`/resource/wam/tutorial`.
+일반 브라우저의 단독 WAM 실행에는 Channel host context가 없습니다. 최종 연결은 공통 해커톤 채널에서 `/tutorial`로 확인합니다. 사진과 텍스트는 자동으로 팀 채팅에 전송하지 않습니다.
