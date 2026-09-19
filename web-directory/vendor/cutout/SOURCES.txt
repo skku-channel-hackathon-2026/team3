@@ -1,0 +1,113 @@
+Sources — skkugit-demo vendor/cutout
+=====================================
+Scope: this is a local-only, non-published hackathon prototype. It has
+not been distributed, deployed, or made available to any third party as
+of the writing of this file. The pins and gates below exist so that, if
+that scope ever changes (public repo push counts as distribution once
+paired with AGPL-triggering network use — see gate below), the exact
+provenance of every runtime artifact is already on record.
+
+Pinned package versions (must match package.json / package-lock.json;
+re-check this file if those are ever bumped)
+-----------------------------------------------------------------------
+  @imgly/background-removal   1.7.0
+    npm:    https://www.npmjs.com/package/@imgly/background-removal
+    tarball (resolved, from installed package's own metadata):
+            https://registry.npmjs.org/@imgly/background-removal/-/background-removal-1.7.0.tgz
+    source map (node_modules/@imgly/background-removal/dist/index.mjs.map)
+    contains embedded sourcesContent — original TypeScript sources are
+    recoverable directly from the installed npm package for AGPL
+    source-availability purposes, no separate upstream repo fetch needed.
+    License: AGPL-3.0 (vendor/cutout/LICENSE-IMG-LY.txt, copied from the
+    installed package's own LICENSE.md).
+
+  onnxruntime-web              1.21.0  (peer dependency of @imgly/
+                                        background-removal)
+    npm:    https://www.npmjs.com/package/onnxruntime-web
+    repo:   https://github.com/microsoft/onnxruntime
+    License: MIT, text pinned from the v1.21.0 git tag (see
+    LICENSE-ONNX.txt for exact fetch URL and full text).
+
+  esbuild-wasm                 0.25.12  (dev dependency, build-time only —
+                                         not shipped to the browser)
+    npm:    https://www.npmjs.com/package/esbuild-wasm
+
+  Transitive dependencies of the above (flatbuffers, long,
+  onnxruntime-common, platform, protobufjs + @protobufjs/*,
+  guid-typescript, lodash-es, ndarray, is-buffer, iota-array, zod,
+  @types/node, undici-types): see THIRD-PARTY-NOTICES.txt for the full
+  per-package version/license/copyright table. Versions for these are
+  whatever package-lock.json currently resolves; re-run `npm ls` against
+  the lockfile before treating this file as current if dependencies are
+  ever updated.
+
+Self-hosted runtime resources (models + WASM)
+-----------------------------------------------------------------------
+  Origin: https://staticimgly.com/@imgly/background-removal-data/1.7.0/dist/
+  (IMG.LY's own CDN for the @imgly/background-removal package's runtime
+  assets — this is the official distribution channel documented by the
+  package itself, not a third-party mirror.)
+
+  Local copy: vendor/cutout/data/ (CPU model + WASM already downloaded
+  into this repo for local/offline use in this prototype).
+
+  Integrity: verified via prepare-cutout.mjs, which reads the pinned
+  manifest at vendor/cutout/data/resources.json (a project-local copy,
+  content-addressed by SHA256 filename == SHA256 hash of each chunk) and
+  either accepts an already-present local file whose SHA256 matches, or
+  downloads it fresh from the staticimgly.com origin above and rejects
+  it if the SHA256 or byte length doesn't match the pinned entry. Note:
+  this pinned manifest is a separate file from, and not the same as,
+  node_modules/@imgly/background-removal/dist/resources.json (which was
+  empty/`{}` in this install) — the project's own vendor/cutout/data/
+  copy is the one actually enforced at download time.
+
+Non-published / local-only prototype scope
+-----------------------------------------------------------------------
+  This app is not currently published, hosted publicly, or distributed
+  to end users. It exists as source + a local dev/build in this
+  session's working directory. No relicensing decision has been made:
+  the presence of @imgly/background-removal (AGPL-3.0) in this codebase
+  does NOT automatically make the surrounding skkugit-demo app AGPL —
+  that determination depends on how tightly the two are combined at
+  distribution/deployment time, which has not been decided or reviewed.
+
+AGPL-3.0 compliance gate — required BEFORE any distribution or deployment
+-----------------------------------------------------------------------
+  Do not push this repo to a public GitHub URL that's treated as "the
+  product," deploy it to a reachable server, or otherwise let users
+  interact with it over a network, until all of the following are
+  explicitly reviewed and signed off (not merely because "the repo is
+  public" — AGPL's network-use clause is what actually triggers
+  obligations, not mere source visibility):
+    1. Source availability: confirm the exact corresponding source
+       (app source + package-lock.json + build script + the vendor
+       model/WASM assets themselves) is what gets offered to any user
+       interacting with the deployed service over a network, per AGPL-3.0
+       §13. A source zip bundling app source + lockfile + build script +
+       vendor model assets is the right shape for this, but has not been
+       assembled or published yet.
+    2. Compatibility review: confirm no other license in this project
+       (or any license the user's own skkugit-demo code is under) is
+       incompatible with AGPL-3.0's copyleft terms before combining or
+       distributing them together.
+    3. Explicit scope decision: decide and document whether the
+       AGPL-3.0 obligation is scoped to just the @imgly/background-removal
+       component (e.g. isolated as a separable network service) or
+       propagates to the whole skkugit-demo app, based on how they are
+       actually combined/linked at deploy time — this has not been
+       decided here and must not be assumed either way.
+    4. Re-verify pinned versions/checksums above are still accurate at
+       the time of actual distribution, since dependencies may have
+       moved since this file was written.
+  None of the above has been completed. This file documents pins and the
+  gate itself; it does not constitute compliance sign-off.
+
+Open items for follow-up (not resolved in this pass)
+-----------------------------------------------------------------------
+  - guid-typescript's ISC license lacks a shipped copyright header (see
+    THIRD-PARTY-NOTICES.txt Group 4).
+  - The "ISNET" model's MIT claim was not independently re-verified
+    against https://github.com/xuebinqin/DIS's own LICENSE file.
+  - No source-availability zip has been assembled yet; §13 compliance is
+    not yet operational, only planned.
