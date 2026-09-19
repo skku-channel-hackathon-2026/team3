@@ -30,7 +30,7 @@ function Send() {
   const { data: wamData, error: wamDataError } = useTutorialWamData()
 
   useEffect(() => {
-    setSize({ width: 390, height: 220 })
+    setSize({ width: 390, height: 260 })
   }, [setSize])
 
   const chatTitle = wamData?.chatTitle ?? ''
@@ -136,19 +136,39 @@ function Send() {
 
   return (
     <VStack spacing={16}>
+      <VStack
+        spacing={4}
+        align="center"
+      >
+        <Text
+          as="h1"
+          typo="24"
+          bold
+          color="text-neutral-heaviest"
+        >
+          Hello, world! 👋
+        </Text>
+        <Text
+          as="p"
+          typo="13"
+          color="text-neutral-light"
+        >
+          SKKU 2026 team3 · Channel App SDK
+        </Text>
+      </VStack>
       <HStack justify="center">
         <ButtonGroup>
           <Button
             variant="filled"
             semantic="primary"
-            label="Send as a manager"
+            label="매니저로 인사하기"
             disabled={chatType !== 'group' || isSending}
             onClick={() => void handleSend('manager')}
           />
           <Button
             variant="filled"
             semantic="primary"
-            label="Send as a bot"
+            label="봇으로 인사하기"
             disabled={chatType !== 'group' || isSending || !targetToken}
             onClick={() => void handleSend('bot')}
           />
